@@ -14,7 +14,7 @@ export default class ServiceWorker {
     this.basePath = pathToBase(this.output, true);
 
     this.ENTRY_NAME = 'serviceworker';
-    this.CACHE_NAME = 'webpack-offline';
+    this.CACHE_NAME = options.cache_name || 'webpack-offline';
     this.SW_DATA_VAR = '__wpo';
   }
 
