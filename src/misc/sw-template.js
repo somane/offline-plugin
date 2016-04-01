@@ -146,9 +146,16 @@ function WebpackServiceWorker(params) {
   self.addEventListener('fetch', function (event) {
     var url = new URL(event.request.url);
 
-    // Match only same origin and known caches
-    // otherwise just perform fetch()
-    if (event.request.method !== 'GET' || url.origin !== location.origin || allAssets.indexOf(url.pathname) === -1) {
+    if (event.request.method !== 'GET' || url.origin !== location.origin) {
+      // Fix for https://twitter.com/wanderview/status/696819243262873600
+      if (navigator.userAgent.indexOf('Firefox/44') !== -1) {
+        event.respondWith(fetch(event.request));
+      }
+
+      return;
+    }
+
+    if (allAssets.indexOf(url.pathname) === -1) {
       if (DEBUG) {
         console.log('[SW]:', 'Path [' + url.pathname + '] does not match any assets');
       }
